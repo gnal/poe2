@@ -5,19 +5,24 @@
         <tr>
             <th>Item</th>
             {#<th>Req</th>#}
+            <th>Sockets</th>
+            {% if masterType == 'weapon' %}
             <th><abbr title="Dmg per Second">DPS</abbr></th>
             <th><abbr title="Avg Physical Dmg">APD</abbr></th>
             <th><abbr title="Avg Elemental Dmg">AED</abbr></th>
             <th><abbr title="Critical Strike Chance">Crit</abbr></th>
             <th><abbr title="Attacks per Second">APS</abbr></th>
+            {% endif %}
+            {% if masterType == 'armor' %}
             <th>Armour</th>
             <th><abbr title="Evasion Rating">ER</abbr></th>
             <th><abbr title="Energy Shield">ES</abbr></th>
+            {% endif %}
         </tr>
     {% for item in items %}
         <tr>
             <td>
-                <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
+                <a data-content="{% include 'PoeCoreBundle:Item:_popover.html.twig' with {'item': item, 'masterType': masterType} %}" class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
                     {{ item.name }}
                 </a>
                 {#<span>{{ item.name ? item.type : item.type.parent }}</span>#}
@@ -38,6 +43,15 @@
                     {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
                 </span>
             </td>#}
+            <td>
+                {% for socket in item.sockets %}
+                    {% for row in socket %}
+                        <span class="text-{% if row == 'S' %}error{% elseif row == 'D'%}success{% else %}info{% endif %}">&bull;</span>
+                    {% endfor %}
+                    {% if loop.index != item.sockets|length %}&nbsp;{% endif %}
+                {% endfor %}
+            </td>
+            {% if masterType == 'weapon' %}
             <td>{{ item.dps|number_format }}</td>
             <td>
                 {% if item.averagePhysicalDamage %}
@@ -64,10 +78,13 @@
             </td>
             <td>{{ item.criticalStrikeChance }}</td>
             <td>{{ item.attacksPerSecond }}</td>
+            {% endif %}
+            {% if masterType == 'armor' %}
             <td>{{ item.armour }}</td>
             <td>{{ item.evasionRating }}</td>
             <td>{{ item.energyShield }}</td>
-            {#<td>{{ item.id }}</td>
+            {% endif %}
+            <td>{{ item.id }}</td>{#
             <td>{{ item.type.parent }} {{ item.type }}</td>#}
         </tr>
     {% endfor %}

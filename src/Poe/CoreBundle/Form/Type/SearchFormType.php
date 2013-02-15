@@ -82,8 +82,18 @@ class SearchFormType extends AbstractType
             'maxEnergyShield' => 'Max Energy Shield',
         ];
 
-        foreach (range(20, 1) as $range) {
+        sort($mod);
+
+        foreach (range(20, 0) as $range) {
             $quality[$range] = $range;
+        }
+
+        foreach (range(6, 1) as $range) {
+            $numSockets[$range] = $range;
+        }
+
+        foreach (range(6, 2) as $range) {
+            $numLinkedSockets[$range] = $range;
         }
 
         $builder
@@ -97,7 +107,7 @@ class SearchFormType extends AbstractType
                 ],
             ])
             ->add('type', 'entity', [
-                'empty_value' => '',
+                // 'empty_value' => '',
                 'attr' => [
                     'class' => 'all',
                 ],
@@ -126,6 +136,34 @@ class SearchFormType extends AbstractType
                     Item::FRAME_TYPE_MAGIC => 'Magic',
                     Item::FRAME_TYPE_RARE => 'Rare',
                     Item::FRAME_TYPE_UNIQUE => 'Unique',
+                ],
+            ])
+
+            ->add('numSockets', 'choice', [
+                'choices' => $numSockets,
+                'empty_value' => '',
+                'attr' => [
+                    'class' => 'all',
+                ],
+            ])
+
+            ->add('numLinkedSockets', 'choice', [
+                'choices' => $numLinkedSockets,
+                'empty_value' => '',
+                'attr' => [
+                    'class' => 'all',
+                ],
+            ])
+
+            ->add('minLvlReq', 'text', [
+                'attr' => [
+                    'style' => 'width: 30px;',
+                ],
+            ])
+
+            ->add('maxLvlReq', 'text', [
+                'attr' => [
+                    'style' => 'width: 30px;',
                 ],
             ])
 

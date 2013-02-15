@@ -2,27 +2,37 @@
 
 {% block content %}
 <div id="sidebar">
-    <h3>Search</h3>
-
+    {#<h3>Search</h3>#}
     <form novalidate method=GET action="{{ path('poe_core_item_search') }}">
         {% form_theme form 'PoeCoreBundle:Form:form.html.twig' %}
         {{ form_widget(form.league) }}
         <div class="row">
             <div class="span2" style="width: 120px;">
+                <p>Type</p>
                 {{ form_widget(form.type) }}
             </div>
             <div class="span1" style="width: 80px;">
+                <p>Rarity</p>
                 {{ form_widget(form.frameType) }}
             </div>
         </div>
 
+        <div class="row">
+            <div class="span2" style="width: 120px;">
+                <p>Lvl Range</p>
+                {{ form_widget(form.minLvlReq) }} - {{ form_widget(form.maxLvlReq) }}
+            </div>
+            <div class="span1" style="width: 80px;">
+                <p>Quality</p>
+                {{ form_widget(form.quality) }}
+            </div>
+        </div>
+
         {{ form_widget(form.name) }}
-        <p><small>Quality</small></p>
-        {{ form_widget(form.quality) }}
 
         <div class="row">
             <div class="span2" style="width: 150px;">
-                <p><small>Property</small></p>
+                <p>Property</p>
                 {{ form_errors(form.prop1) }}
                 {{ form_widget(form.prop1) }}
                 {{ form_widget(form.prop2) }}
@@ -30,7 +40,7 @@
                 {{ form_widget(form.prop4) }}
             </div>
             <div class="span1" style="width: 50px;">
-                <p><small>Min</small></p>
+                <p>Min</p>
                 <div class="poe_search_prop1_chzn">{{ form_widget(form.prop1val) }}</div>
                 <div class="poe_search_prop2_chzn">{{ form_widget(form.prop2val) }}</div>
                 <div class="poe_search_prop3_chzn">{{ form_widget(form.prop3val) }}</div>
@@ -40,7 +50,7 @@
 
         <div class="row">
             <div class="span2" style="width: 150px;">
-                <p><small>Mod</small></p>
+                <p>Mod</p>
                 {{ form_widget(form.mod1) }}
                 {{ form_widget(form.mod2) }}
                 {{ form_widget(form.mod3) }}
@@ -49,7 +59,7 @@
                 {{ form_widget(form.mod6) }}
             </div>
             <div class="span1" style="width: 50px;">
-                <p><small>Min</small></p>
+                <p>Min</p>
                 <div class="poe_search_mod1_chzn">{{ form_widget(form.mod1val) }}</div>
                 <div class="poe_search_mod2_chzn">{{ form_widget(form.mod2val) }}</div>
                 <div class="poe_search_mod3_chzn">{{ form_widget(form.mod3val) }}</div>
@@ -61,13 +71,13 @@
 
         {{ form_rest(form) }}
         <p><button class="btn btn-inverse btn-block" type=submit><i class="icon-search icon-white"></i></button></p>
-        {#<p><a class="badge badge-warning" href="{{ path('poe_core_item_search') }}">Reset</a></p>#}
+        <p><a href="{{ path('poe_core_item_search') }}">Reset</a></p>
     </form>
 </div>
 <div id="content">
     <div class="row-fluid">
         <div class="span12">
-            <h3>Results</h3>
+            {#<h3>Results</h3>#}
             {% include 'PoeCoreBundle:Item:search_content.html.twig' %}
         </div>
     </div>
@@ -77,7 +87,7 @@
 
 {% block js %}
 {{ parent() }}
-<script src="https://github.com/brandonaaron/jquery-mousewheel/raw/master/jquery.mousewheel.js"></script>
+<script src="{{ asset('bundles/poecore/vendor/jquery-mousewheel/jquery-mousewheel.js') }}"></script>
 <script>
     $(function() {
         $.each($('.chzn-results'), function(i, v) {
@@ -107,7 +117,7 @@
 
     $('.item').popover({
         trigger: 'hover',
-        content: 'dada',
+        html: true,
         animation: false
     })
 
@@ -135,17 +145,19 @@
         $('div.'+id).children('input').focus();
     });
 
-    $('form').on('submit', function(e) {
-        e.preventDefault();
-        $('#results').empty();
-        $.ajax($(this).attr('action'), {
-            data: $(this).serialize(),
-            success: function(data) {
-                $('#results').replaceWith(data);
-                ready = true;
-            }
-        });
-    });
+    // ajax
+    // $('form').on('submit', function(e) {
+    //     e.preventDefault();
+    //     $('#results').empty();
+    //     $.ajax($(this).attr('action'), {
+    //         data: $(this).serialize(),
+    //         success: function(data) {
+    //             $('#results').replaceWith(data);
+    //             ready = true;
+    //         }
+    //     });
+    // });
+
     // (function($) {
     //     "use strict";
 

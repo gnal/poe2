@@ -1,0 +1,45 @@
+<p>
+    <span class='text-frame-type-{{ item.frameType }}'>{{ item.name }}
+    <br>
+    {{ item.type }}
+    </span>
+</p>
+
+{% if masterType == 'weapon' %}
+<p>
+{{ item.type.parent }}
+<br>
+Physical Damage: <span class='{% if item.increasedPhysicalDamage %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.minPhysicalDamage }} - {{ item.maxPhysicalDamage }}</span>
+<br>
+Critical Strike Chance: <span class='{% if item.increasedPhysicalDamage %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.criticalStrikeChance }}%</span>
+<br>
+Attacks per Second: <span class='{% if item.increasedAttackSpeed %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.attacksPerSecond }}</span>
+</p>
+{% endif %}
+
+<p>
+    {% if item.quality %}
+        Quality: <span class='text-frame-type-1'>+{{ item.quality }}%</span>
+        <br>
+    {% endif %}
+    {% if item.armour %}
+        Armour: <span class='text-frame-type-1'>{{ item.armour }}</span>
+        <br>
+    {% endif %}
+    {% if item.evasionRating %}
+        Evasion Rating: <span class='text-frame-type-1'>{{ item.evasionRating }}</span>
+        <br>
+    {% endif %}
+    {% if item.energyShield %}
+        Energy Shield: <span class='text-frame-type-1'>{{ item.energyShield }}</span>
+    {% endif %}
+</p>
+
+<hr>
+
+<p>
+    Requires Level <span class='text-white'>{{ item.lvlReq }}</span>{% if item.strReq %}, <span class='text-white'>{{ item.strReq }}</span> Str{% endif %}{% if item.dexReq %}, <span class='text-white'>{{ item.dexReq }}</span> Dex{% endif %}{% if item.intReq %}, <span class='text-white'>{{ item.intReq }}</span> Int{% endif %}
+</p>
+
+<hr>
+

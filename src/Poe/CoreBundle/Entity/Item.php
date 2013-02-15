@@ -177,9 +177,19 @@ class Item
     protected $league;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="array", nullable=true)
      */
     protected $sockets;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $numLinkedSockets;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $numSockets;
 
     /**
      * @ORM\Column(type="boolean")
@@ -302,6 +312,23 @@ class Item
      */
     protected $maxEnergyShield;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    protected $json;
+
+    public function getJson()
+    {
+        return $this->json;
+    }
+
+    public function setJson($json)
+    {
+        $this->json = $json;
+
+        return $this;
+    }
+
     public function calcDps()
     {
         $combinedAverageDamage = $this->calcAveragePhysicalDamage() + $this->calcAverageFireDamage() + $this->calcAverageColdDamage() + $this->calcAverageLightningDamage();
@@ -350,9 +377,40 @@ class Item
         return $this;
     }
 
+    private function calcAverageDamage($min, $max)
+    {
+        return ($min + $max) / 2;
+    }
+
+    // getset
+
+    public function getNumLinkedSockets()
+    {
+        return $this->numLinkedSockets;
+    }
+
+    public function setNumLinkedSockets($numLinkedSockets)
+    {
+        $this->numLinkedSockets = $numLinkedSockets;
+
+        return $this;
+    }
+
+    public function getNumSockets()
+    {
+        return $this->numSockets;
+    }
+
+    public function setNumSockets($numSockets)
+    {
+        $this->numSockets = $numSockets;
+
+        return $this;
+    }
+
     public function getIntelligence()
     {
-        return $this->int;
+        return $this->intelligence;
     }
 
     public function setIntelligence($intelligence)
@@ -994,10 +1052,5 @@ class Item
     public function __toString()
     {
         return (string) $this->type;
-    }
-
-    private function calcAverageDamage($min, $max)
-    {
-        return ($max - $min) / 2 + $min;
     }
 }

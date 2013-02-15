@@ -20,6 +20,11 @@ a:hover {
     text-decoration: none;
     color: #fff;
 }
+form p {
+    margin-bottom: 3px;
+    font-size: 85%;
+    line-height: 15px;
+}
 label {
     font-size: 85%;
 }
@@ -34,6 +39,7 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     background: #0f0f0f;
     border-color: #333;
     color: #a38d6d;
+    margin-bottom: 5px;
 }
 .table {
     border-color: #333;
@@ -56,6 +62,9 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 /*.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
     background-color: #0f0f0f;
 }*/
+.text-white {
+    color: #fff;
+}
 .text-frame-type-0 {
     color: #c8c8c8;
 }
@@ -86,9 +95,31 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
     color: #fff;
     text-shadow: 1px 1px #000;
 }
+.popover {
+    background: #0f0f0f;
+    border: 1px solid #333;
+    color: #999;
+    font-size: 85%;
+}
+.popover p {
+    line-height: 15px;
+    margin-bottom: 5px;
+}
+.popover hr {
+    margin: 5px 0;
+    border: 0;
+    border-top: 0;
+    border-bottom: 1px solid #333;
+}
+.popover-title {
+    display: none;
+}
+.popover .arrow {
+    display: none;
+}
 /* chosen */
 .chzn-container {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 .chzn-container .chzn-drop {
     background: #0f0f0f;
@@ -154,9 +185,11 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 #sidebar {
     width: 220px;
     position: absolute;
+    padding-top: 20px;
 }
 #content {
     margin-left: 240px;
+    padding-top: 20px;
 }
 .container-fluid {
     min-width: 960px;
