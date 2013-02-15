@@ -1,0 +1,189 @@
+{% extends 'MsiCmfBundle:Page:layout.html.twig' %}
+
+{% block brand %}PoE{% endblock brand %}
+
+{% block css %}
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('bundles/msicmf/vendor/chosen/chosen.css') }}">
+<style type="text/css">
+html {
+    overflow-y: scroll;
+}
+body {
+    background-color: #1a1b18;
+    color: #a38d6d;
+}
+a {
+    color: #fff;
+}
+a:hover {
+    text-decoration: none;
+    color: #fff;
+}
+label {
+    font-size: 85%;
+}
+select {
+    width: 100%;
+}
+input.alert-error {
+    color: #b94a48 !important;
+    border-color: #b94a48 !important;
+}
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    background: #0f0f0f;
+    border-color: #333;
+    color: #a38d6d;
+}
+.table {
+    border-color: #333;
+    background-color: #0f0f0f;
+}
+.table th,
+.table td {
+    vertical-align: middle;
+    border-color: #333;
+}
+.table-bordered {
+    border-left: 1px solid #333;
+}
+.table-bordered th, .table-bordered td {
+    border-left: 1px solid #1a1b18;
+}
+.table-bordered th:first-child, .table-bordered td:first-child {
+    border-left: none;
+}
+/*.table-striped tbody > tr:nth-child(odd) > td, .table-striped tbody > tr:nth-child(odd) > th {
+    background-color: #0f0f0f;
+}*/
+.text-frame-type-0 {
+    color: #c8c8c8;
+}
+.text-frame-type-1 {
+    color: #88f;
+}
+.text-frame-type-2 {
+    color: #ff7;
+}
+.text-frame-type-3 {
+    color: #af6025;
+}
+.text-frame-type-4 {
+    color: #1ba29b;
+}
+.text-frame-type-5 {
+    color: #ffdfac;
+}
+.pagination {
+    margin-top: 0;
+}
+.pagination ul > li > a, .pagination ul > li > span {
+    border-color: #333;
+    background-color: #0f0f0f;
+}
+.pagination ul > li > a:hover, .pagination ul > li > a:focus, .pagination ul > .active > a, .pagination ul > .active > span {
+    background-color: red;
+    color: #fff;
+    text-shadow: 1px 1px #000;
+}
+/* chosen */
+.chzn-container {
+    margin-bottom: 10px;
+}
+.chzn-container .chzn-drop {
+    background: #0f0f0f;
+    border-color: #333;
+    width: 218px !important;
+}
+.chzn-container-single .chzn-search input {
+    background: #0f0f0f;
+    border-color: #333;
+    color: #a38d6d;
+}
+.chzn-container-single .chzn-default {
+    color: #999 !important;
+}
+.chzn-container .chzn-results .no-results {
+    background: #0f0f0f;
+}
+.chzn-container-single .chzn-search {
+    border-top: 1px solid #333;
+}
+.chzn-container-single .chzn-search input {
+    width: 183px !important;
+}
+.chzn-container .chzn-results li em {
+    background: red;
+    color: #fff;
+    text-shadow: 1px 1px #000;
+}
+.chzn-container-active .chzn-single-with-drop {
+    background: #0f0f0f;
+    border-color: #333;
+}
+.chzn-container-single .chzn-single {
+    background: #0f0f0f;
+    border-color: #333;
+    box-shadow: none;
+    padding: 4px 6px;
+    height: 20px;
+    line-height: 20px;
+    color: #a38d6d;
+}
+.chzn-container .chzn-results .highlighted {
+    background: red;
+    color: #fff;
+    text-shadow: 1px 1px #000;
+}
+.chzn-container-single .chzn-single abbr {
+    background-image: url("/bundles/msicmf/vendor/bootstrap/img/glyphicons-halflings-white.png");
+    background-position: -312px 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 1px;
+    right: 18px;
+}
+.chzn-container-single .chzn-single abbr:hover {
+    background-position: -312px 0;
+    background-color: red;
+}
+.chzn-container-single .chzn-single span {
+    height: 20px;
+}
+/* layout */
+#sidebar {
+    width: 220px;
+    position: absolute;
+}
+#content {
+    margin-left: 240px;
+}
+.container-fluid {
+    min-width: 960px;
+}
+/*#results {
+    min-height: 500px;
+    background: url(/bundles/poecore/img/ajax-loader.gif) no-repeat center center;
+}*/
+</style>
+{{ parent() }}
+{% endblock css %}
+
+{% block js %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+<script src="{{ asset('bundles/msicmf/vendor/chosen/chosen.jquery.min.js') }}"></script>
+{{ parent() }}
+{% endblock js %}
+
+{% block body %}
+<div class="container-fluid">
+    {% for key, message in app.session.flashbag.all() %}
+    <div class="alert alert-{{ key }} fade in">
+        <a class="close" data-dismiss="alert" href="#">×</a>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {{ block('page_content') }}
+</div>
+{% endblock body %}

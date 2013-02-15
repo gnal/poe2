@@ -1,0 +1,79 @@
+<div id="results">
+    {% if items is defined %}
+    {% if items|length %}
+    <table class="table table-bordered">
+        <tr>
+            <th>Item</th>
+            {#<th>Req</th>#}
+            <th><abbr title="Dmg per Second">DPS</abbr></th>
+            <th><abbr title="Avg Physical Dmg">APD</abbr></th>
+            <th><abbr title="Avg Elemental Dmg">AED</abbr></th>
+            <th><abbr title="Critical Strike Chance">Crit</abbr></th>
+            <th><abbr title="Attacks per Second">APS</abbr></th>
+            <th>Armour</th>
+            <th><abbr title="Evasion Rating">ER</abbr></th>
+            <th><abbr title="Energy Shield">ES</abbr></th>
+        </tr>
+    {% for item in items %}
+        <tr>
+            <td>
+                <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
+                    {{ item.name }}
+                </a>
+                {#<span>{{ item.name ? item.type : item.type.parent }}</span>#}
+                {#<br>
+                <span>
+                    Req:
+                    {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
+                    {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
+                    {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
+                    {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
+                </span>#}
+            </td>
+            {#<td>
+                <span>
+                    {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
+                    {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
+                    {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
+                    {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
+                </span>
+            </td>#}
+            <td>{{ item.dps|number_format }}</td>
+            <td>
+                {% if item.averagePhysicalDamage %}
+                    <span class="muted">{{ item.averagePhysicalDamage|number_format }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if item.averageElementalDamage %}
+                <span class="text-success" style="margin-right: 20px;">{{ item.averageElementalDamage|number_format }}</span>
+                <span class="pull-right">
+                {% if item.averageFireDamage %}
+                    <span class="text-error">{{ item.averageFireDamage|number_format }}</span>
+                    <span class="muted">{% if item.averageColdDamage or item.averageLightningDamage %}+{% endif %}</span>
+                {% endif %}
+                {% if item.averageColdDamage %}
+                    <span class="text-info">{{ item.averageColdDamage|number_format }}</span>
+                    <span class="muted">{% if item.averageLightningDamage %}+{% endif %}</span>
+                {% endif %}
+                {% if item.averageLightningDamage %}
+                    <span class="text-warning">{{ item.averageLightningDamage|number_format }}</span>
+                {% endif %}
+                </span>
+                {% endif %}
+            </td>
+            <td>{{ item.criticalStrikeChance }}</td>
+            <td>{{ item.attacksPerSecond }}</td>
+            <td>{{ item.armour }}</td>
+            <td>{{ item.evasionRating }}</td>
+            <td>{{ item.energyShield }}</td>
+            {#<td>{{ item.id }}</td>
+            <td>{{ item.type.parent }} {{ item.type }}</td>#}
+        </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+    Nothing was found.
+    {% endif %}
+    {% endif %}
+</div>

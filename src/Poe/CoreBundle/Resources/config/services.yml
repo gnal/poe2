@@ -1,0 +1,29 @@
+parameters:
+#    poe_core.example.class: Poe\CoreBundle\Example
+
+services:
+    # Item
+    poe_core_item_admin:
+        class: Poe\CoreBundle\Admin\ItemAdmin
+        arguments: [ @poe_core.item_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.item_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\Item ]
+        parent: msi_cmf.manager
+
+    # ItemType
+    poe_core_item_type_admin:
+        class: Poe\CoreBundle\Admin\ItemTypeAdmin
+        arguments: [ @poe_core.item_type_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.item_type_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\ItemType ]
+        parent: msi_cmf.manager

@@ -1,0 +1,194 @@
+{% extends 'PoeCoreBundle::layout.html.twig' %}
+
+{% block content %}
+<div id="sidebar">
+    <h3>Search</h3>
+
+    <form novalidate method=GET action="{{ path('poe_core_item_search') }}">
+        {% form_theme form 'PoeCoreBundle:Form:form.html.twig' %}
+        {{ form_widget(form.league) }}
+        <div class="row">
+            <div class="span2" style="width: 120px;">
+                {{ form_widget(form.type) }}
+            </div>
+            <div class="span1" style="width: 80px;">
+                {{ form_widget(form.frameType) }}
+            </div>
+        </div>
+
+        {{ form_widget(form.name) }}
+        <p><small>Quality</small></p>
+        {{ form_widget(form.quality) }}
+
+        <div class="row">
+            <div class="span2" style="width: 150px;">
+                <p><small>Property</small></p>
+                {{ form_errors(form.prop1) }}
+                {{ form_widget(form.prop1) }}
+                {{ form_widget(form.prop2) }}
+                {{ form_widget(form.prop3) }}
+                {{ form_widget(form.prop4) }}
+            </div>
+            <div class="span1" style="width: 50px;">
+                <p><small>Min</small></p>
+                <div class="poe_search_prop1_chzn">{{ form_widget(form.prop1val) }}</div>
+                <div class="poe_search_prop2_chzn">{{ form_widget(form.prop2val) }}</div>
+                <div class="poe_search_prop3_chzn">{{ form_widget(form.prop3val) }}</div>
+                <div class="poe_search_prop4_chzn">{{ form_widget(form.prop4val) }}</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span2" style="width: 150px;">
+                <p><small>Mod</small></p>
+                {{ form_widget(form.mod1) }}
+                {{ form_widget(form.mod2) }}
+                {{ form_widget(form.mod3) }}
+                {{ form_widget(form.mod4) }}
+                {{ form_widget(form.mod5) }}
+                {{ form_widget(form.mod6) }}
+            </div>
+            <div class="span1" style="width: 50px;">
+                <p><small>Min</small></p>
+                <div class="poe_search_mod1_chzn">{{ form_widget(form.mod1val) }}</div>
+                <div class="poe_search_mod2_chzn">{{ form_widget(form.mod2val) }}</div>
+                <div class="poe_search_mod3_chzn">{{ form_widget(form.mod3val) }}</div>
+                <div class="poe_search_mod4_chzn">{{ form_widget(form.mod4val) }}</div>
+                <div class="poe_search_mod5_chzn">{{ form_widget(form.mod5val) }}</div>
+                <div class="poe_search_mod6_chzn">{{ form_widget(form.mod6val) }}</div>
+            </div>
+        </div>
+
+        {{ form_rest(form) }}
+        <p><button class="btn btn-inverse btn-block" type=submit><i class="icon-search icon-white"></i></button></p>
+        {#<p><a class="badge badge-warning" href="{{ path('poe_core_item_search') }}">Reset</a></p>#}
+    </form>
+</div>
+<div id="content">
+    <div class="row-fluid">
+        <div class="span12">
+            <h3>Results</h3>
+            {% include 'PoeCoreBundle:Item:search_content.html.twig' %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+{{ parent() }}
+<script src="https://github.com/brandonaaron/jquery-mousewheel/raw/master/jquery.mousewheel.js"></script>
+<script>
+    $(function() {
+        $.each($('.chzn-results'), function(i, v) {
+            var $v = $(v),
+                height = $v.height(),
+                scrollHeight = $v.get(0).scrollHeight;
+
+            $v.on('mousewheel', function(e, d) {
+                if((this.scrollTop === (scrollHeight - height) && d < 0) || (this.scrollTop === 0 && d > 0)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+
+    $("select.none").chosen({
+        placeholder_text_single: 'None',
+        placeholder_text_multiple: 'None',
+        allow_single_deselect: true
+    });
+
+    $("select.all").chosen({
+        placeholder_text_single: 'All',
+        placeholder_text_multiple: 'All',
+        allow_single_deselect: true
+    });
+
+    $('.item').popover({
+        trigger: 'hover',
+        content: 'dada',
+        animation: false
+    })
+
+    $('input.alert-error').tooltip({
+        trigger: 'hover',
+        html: true,
+        animation: false
+    })
+
+    $('small.aed').tooltip({
+        trigger: 'hover',
+        html: true,
+        animation: false
+    })
+
+    $('.chzn-container-single .chzn-single').on('mousedown', function(evt) {
+        if ($(evt.target).hasClass("search-choice-close")) {
+            var id = $(this).closest('div').attr('id');
+            $('div.'+id).children('input').attr('value', '').blur();
+        }
+    });
+
+    $('.active-result').on('click', function(evt) {
+        var id = $(this).closest('div.chzn-container').attr('id');
+        $('div.'+id).children('input').focus();
+    });
+
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+        $('#results').empty();
+        $.ajax($(this).attr('action'), {
+            data: $(this).serialize(),
+            success: function(data) {
+                $('#results').replaceWith(data);
+                ready = true;
+            }
+        });
+    });
+    // (function($) {
+    //     "use strict";
+
+    //     function getContent(url) {
+    //         $('#results').empty();
+    //         $.ajax(url, {
+    //             success: function(data) {
+    //                 $('#results').replaceWith(data);
+    //                 ready = true;
+    //             }
+    //         });
+    //     };
+
+    //     var ready = true;
+
+    //     $('div.container-fluid').on('click', 'div.pagination a', function(e) {
+    //         e.preventDefault();
+    //         ready = false;
+    //         getContent($(this).attr('href'));
+    //     });
+
+    //     $(window).on('keyup', function(e) {
+    //         e.preventDefault();
+    //         if ((e.which === 68 || e.which === 65) && ready === true) {
+    //             ready = false;
+    //             var $ul = $('.pagination ul');
+    //             var current = $ul.children('li.active').children().attr('href');
+
+    //             if (e.which === 68) {
+    //                 var url = $ul.children('li.active').next().children().attr('href');
+    //                 if (current === url) {
+    //                     url = $ul.children().first().next().children().attr('href');
+    //                 }
+    //             } else {
+    //                 var url = $ul.children('li.active').prev().children().attr('href');
+    //                 if (current === url) {
+    //                     url = $ul.children().last().prev().children().attr('href');
+    //                 }
+    //             }
+
+    //             getContent(url);
+    //         }
+    //     });
+    // })(jQuery);
+</script>
+{% endblock js %}

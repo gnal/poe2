@@ -1,0 +1,8 @@
+WishList:
+    - show
+    - add
+Product:
+    - list
+    - show
+ProductCategory:
+    - list

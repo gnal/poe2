@@ -1,0 +1,3 @@
+entity:
+    Item: Item|Items
+    ItemType: Type|Types
