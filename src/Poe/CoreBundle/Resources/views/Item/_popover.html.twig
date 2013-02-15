@@ -1,13 +1,19 @@
 <p>
     <span class='text-frame-type-{{ item.frameType }}'>{{ item.name }}
+    {% if item.name != item.type.name %}
     <br>
     {{ item.type }}
+    {% endif %}
     </span>
 </p>
 
 {% if masterType == 'weapon' %}
 <p>
 {{ item.type.parent }}
+{% if item.quality %}
+        <br>
+        Quality: <span class='text-frame-type-1'>+{{ item.quality }}%</span>
+    {% endif %}
 {% if item.averagePhysicalDamage %}
 <br>
 Physical Damage: <span class='{% if item.increasedPhysicalDamage %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.averagePhysicalDamage|number_format }}</span>
@@ -27,6 +33,7 @@ Attacks per Second: <span class='{% if item.increasedAttackSpeed %}text-frame-ty
 </p>
 {% endif %}
 
+{% if masterType == 'armor' %}
 <p>
     {% if item.quality %}
         Quality: <span class='text-frame-type-1'>+{{ item.quality }}%</span>
@@ -44,6 +51,7 @@ Attacks per Second: <span class='{% if item.increasedAttackSpeed %}text-frame-ty
         Energy Shield: <span class='text-frame-type-1'>{{ item.energyShield }}</span>
     {% endif %}
 </p>
+{% endif %}
 
 <hr>
 
