@@ -8,12 +8,22 @@
 {% if masterType == 'weapon' %}
 <p>
 {{ item.type.parent }}
+{% if item.averagePhysicalDamage %}
 <br>
-Physical Damage: <span class='{% if item.increasedPhysicalDamage %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.minPhysicalDamage }} - {{ item.maxPhysicalDamage }}</span>
+Physical Damage: <span class='{% if item.increasedPhysicalDamage %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.averagePhysicalDamage|number_format }}</span>
+{% endif %}
+{% if item.averageFireDamage or item.averageColdDamage or item.averageLightningDamage %}
+<br>
+Elemental Damage: {% if item.averageFireDamage %}<span class='text-error'>{{ item.averageFireDamage|number_format }}</span>{% endif %}{% if item.averageColdDamage %}{% if item.averageFireDamage %}, {% endif %}<span class='text-info'>{{ item.averageColdDamage|number_format }}</span>{% endif %}{% if item.averageLightningDamage %}{% if item.averageFireDamage or item.averageColdDamage %}, {% endif %}<span class='text-warning'>{{ item.averageLightningDamage|number_format }}</span>{% endif %}
+{% endif %}
+{% if item.criticalStrikeChance %}
 <br>
 Critical Strike Chance: <span class='{% if item.increasedPhysicalDamage %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.criticalStrikeChance }}%</span>
+{% endif %}
+{% if item.attacksPerSecond %}
 <br>
 Attacks per Second: <span class='{% if item.increasedAttackSpeed %}text-frame-type-1{% else %}text-white{% endif %}'>{{ item.attacksPerSecond }}</span>
+{% endif %}
 </p>
 {% endif %}
 
