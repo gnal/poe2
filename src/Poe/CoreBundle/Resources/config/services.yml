@@ -27,3 +27,29 @@ services:
         class: %msi_cmf.manager.class%
         arguments: [ Poe\CoreBundle\Entity\ItemType ]
         parent: msi_cmf.manager
+
+    # ExplicitMod
+    poe_core_explicit_mod_admin:
+        class: Poe\CoreBundle\Admin\ExplicitModAdmin
+        arguments: [ @poe_core.explicit_mod_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.explicit_mod_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\ExplicitMod ]
+        parent: msi_cmf.manager
+
+    # ItemExplicitMod
+    poe_core_item_explicit_mod_admin:
+        class: Poe\CoreBundle\Admin\ItemExplicitModAdmin
+        arguments: [ @poe_core.item_explicit_mod_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.item_explicit_mod_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\ItemExplicitMod ]
+        parent: msi_cmf.manager

@@ -75,6 +75,8 @@ class CrawlCommand extends ContainerAwareCommand
         $this->itemTypeManager = $this->getContainer()->get('poe_core.item_type_manager');
         $page = $input->getArgument('page');
         $this->output = $output;
+        $this->em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         $this->process($page);
 
@@ -182,172 +184,209 @@ class CrawlCommand extends ContainerAwareCommand
                 // mods
                 if (isset($row['explicitMods'])) {
                     foreach ($row['explicitMods'] as $mod) {
-                        if (preg_match('@([0-9]+)% increased Physical Damage@', $mod, $matches)) {
-                            $item->setIncreasedPhysicalDamage($matches[1]);
+
+                        $name = preg_replace('@[0-9]+\.?[0-9]*-[0-9]+\.?[0-9]*@', 'x', $mod);
+                        preg_match('@([0-9]+\.?[0-9]*)-([0-9]+\.?[0-9]*)@', $mod, $matches);
+                        $value = isset($matches[2]) ? ($matches[1] + $matches[2]) / 2 : null;
+
+                        if (!isset($matches[2])) {
+                            $pattern = '[0-9]+\.?[0-9]*';
+                            $name = preg_replace('@'.$pattern.'@', 'x', $mod);
+                            preg_match('@('.$pattern.')@', $mod, $matches);
+                            $value = isset($matches[1]) ? $matches[1] : null;
                         }
-                        if (preg_match('@([0-9]+)% increased Stun Duration on enemies@', $mod, $matches)) {
-                            $item->setIncreasedStunDuration($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Intelligence@', $mod, $matches)) {
-                            $item->setIntelligence($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Dexterity@', $mod, $matches)) {
-                            $item->setDexterity($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Strength@', $mod, $matches)) {
-                            $item->setStrength($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% increased Attack Speed@', $mod, $matches)) {
-                            $item->setIncreasedAttackSpeed($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% increased Cast Speed@', $mod, $matches)) {
-                            $item->setIncreasedCastSpeed($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) Mana Gained when you Kill an enemy@', $mod, $matches)) {
-                            $item->setManaOnKill($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) Life Gained when you Kill an enemy@', $mod, $matches)) {
-                            $item->setLifeOnKill($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% increased Elemental Damage with Weapons@', $mod, $matches)) {
-                            $item->setIncreasedElementalDamageWeapons($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to Accuracy Rating@', $mod, $matches)) {
-                            $item->setAccuracyRating($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Life@', $mod, $matches)) {
-                            $item->setLifeLeech($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% of Physical Attack Damage Leeched back as Mana@', $mod, $matches)) {
-                            $item->setManaLeech($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Chaos Resist@', $mod, $matches)) {
-                            $item->setChaosResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Cold Resistance@', $mod, $matches)) {
-                            $item->setColdResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Lightning Resistance@', $mod, $matches)) {
-                            $item->setLightningResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% to Fire Resistance@', $mod, $matches)) {
-                            $item->setFireResist($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+)% reduced Enemy Stun Threshold@', $mod, $matches)) {
-                            $item->setReducedStunThreshold($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) Life gained for each enemy hit by your Attacks@', $mod, $matches)) {
-                            $item->setLifeOnHit($matches[1]);
-                        }
-                        if (preg_match('@([0-9]+) to maximum Energy Shield@', $mod, $matches)) {
-                            $item->setMaxEnergyShield($matches[1]);
+
+                        if ($value) {
+                            // $this->output->writeln($name.'<info> = </info>'.$value);
+                            $this->createExplicitMod($name, $item, $value);
                         }
                     }
                 }
 
-                // properties
-                if (isset($row['properties'])) {
-                    foreach ($row['properties'] as $property) {
-                        if ($property['name'] === 'Physical Damage') {
-                            $pieces = explode('-', $property['values'][0][0]);
-                            $min = $pieces[0];
-                            $max = $pieces[1];
-                            $item
-                                ->setMinPhysicalDamage($min)
-                                ->setMaxPhysicalDamage($max)
-                            ;
+                // mods
+                if (isset($row['implicitMods'])) {
+                    foreach ($row['implicitMods'] as $mod) {
+
+                        $name = preg_replace('@[0-9]+\.?[0-9]*-[0-9]+\.?[0-9]*@', 'x', $mod);
+                        preg_match('@([0-9]+\.?[0-9]*)-([0-9]+\.?[0-9]*)@', $mod, $matches);
+                        $value = isset($matches[2]) ? ($matches[1] + $matches[2]) / 2 : null;
+
+                        if (!isset($matches[2])) {
+                            $pattern = '[0-9]+\.?[0-9]*';
+                            $name = preg_replace('@'.$pattern.'@', 'x', $mod);
+                            preg_match('@('.$pattern.')@', $mod, $matches);
+                            $value = isset($matches[1]) ? $matches[1] : null;
                         }
-                        if ($property['name'] === 'Elemental Damage') {
-                            foreach ($property['values'] as $value) {
-                                if ($value[1] == 4) {
-                                    $pieces = explode('-', $value[0]);
-                                    $min = $pieces[0];
-                                    $max = $pieces[1];
-                                    $item
-                                        ->setMinFireDamage($min)
-                                        ->setMaxFireDamage($max)
-                                    ;
-                                }
-                                if ($value[1] == 5) {
-                                    $pieces = explode('-', $value[0]);
-                                    $min = $pieces[0];
-                                    $max = $pieces[1];
-                                    $item
-                                        ->setMinColdDamage($min)
-                                        ->setMaxColdDamage($max)
-                                    ;
-                                }
-                                if ($value[1] == 6) {
-                                    $pieces = explode('-', $value[0]);
-                                    $min = $pieces[0];
-                                    $max = $pieces[1];
-                                    $item
-                                        ->setMinLightningDamage($min)
-                                        ->setMaxLightningDamage($max)
-                                    ;
-                                }
-                            }
-                        }
-                        if ($property['name'] === 'Quality') {
-                            $item->setQuality(str_replace('%', '', $property['values'][0][0]));
-                        }
-                        if ($property['name'] === 'Armour') {
-                            $item->setArmour($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Evasion Rating') {
-                            $item->setEvasionRating($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Energy Shield') {
-                            $item->setEnergyShield($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Attacks per Second') {
-                            $item->setAttacksPerSecond($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Critical Strike Chance') {
-                            $item->setCriticalStrikeChance($property['values'][0][0]);
-                        }
-                        if ($property['name'] === 'Map Level') {
-                            $item->setMapLvl($property['values'][0][0]);
+
+                        if ($value) {
+                            // $this->output->writeln($name.'<info> = </info>'.$value);
+                            $this->createImplicitMod($name, $item, $value);
                         }
                     }
                 }
+
+
+                // properties
+                // if (isset($row['properties'])) {
+                //     foreach ($row['properties'] as $mod) {
+
+                //         $name = preg_replace('@[0-9]+\.?[0-9]*-[0-9]+\.?[0-9]*@', 'x', $mod);
+                //         preg_match('@([0-9]+\.?[0-9]*)-([0-9]+\.?[0-9]*)@', $mod, $matches);
+                //         $value = isset($matches[2]) ? ($matches[1] + $matches[2]) / 2 : null;
+
+                //         if (!isset($matches[2])) {
+                //             $pattern = '[0-9]+\.?[0-9]*';
+                //             $name = preg_replace('@'.$pattern.'@', 'x', $mod);
+                //             preg_match('@('.$pattern.')@', $mod, $matches);
+                //             $value = isset($matches[1]) ? $matches[1] : null;
+                //         }
+
+                //         if ($value) {
+                //             // $this->output->writeln($name.'<info> = </info>'.$value);
+                //             $this->createExplicitMod($name, $item, $value);
+                //         }
+                //     }
+                // }
+
+                // // properties
+                // if (isset($row['properties'])) {
+                //     foreach ($row['properties'] as $property) {
+                //         // if ($property['name'] === 'Physical Damage') {
+                //         //     $pieces = explode('-', $property['values'][0][0]);
+                //         //     $min = $pieces[0];
+                //         //     $max = $pieces[1];
+                //         //     $item
+                //         //         ->setMinPhysicalDamage($min)
+                //         //         ->setMaxPhysicalDamage($max)
+                //         //     ;
+                //         // }
+                //         // if ($property['name'] === 'Elemental Damage') {
+                //         //     foreach ($property['values'] as $value) {
+                //         //         if ($value[1] == 4) {
+                //         //             $pieces = explode('-', $value[0]);
+                //         //             $min = $pieces[0];
+                //         //             $max = $pieces[1];
+                //         //             $item
+                //         //                 ->setMinFireDamage($min)
+                //         //                 ->setMaxFireDamage($max)
+                //         //             ;
+                //         //         }
+                //         //         if ($value[1] == 5) {
+                //         //             $pieces = explode('-', $value[0]);
+                //         //             $min = $pieces[0];
+                //         //             $max = $pieces[1];
+                //         //             $item
+                //         //                 ->setMinColdDamage($min)
+                //         //                 ->setMaxColdDamage($max)
+                //         //             ;
+                //         //         }
+                //         //         if ($value[1] == 6) {
+                //         //             $pieces = explode('-', $value[0]);
+                //         //             $min = $pieces[0];
+                //         //             $max = $pieces[1];
+                //         //             $item
+                //         //                 ->setMinLightningDamage($min)
+                //         //                 ->setMaxLightningDamage($max)
+                //         //             ;
+                //         //         }
+                //         //     }
+                //         // }
+                //         if ($property['name'] === 'Quality') {
+                //             $item->setQuality(str_replace('%', '', $property['values'][0][0]));
+                //         }
+                //         if ($property['name'] === 'Armour') {
+                //             $item->setArmour($property['values'][0][0]);
+                //         }
+                //         if ($property['name'] === 'Evasion Rating') {
+                //             $item->setEvasionRating($property['values'][0][0]);
+                //         }
+                //         if ($property['name'] === 'Energy Shield') {
+                //             $item->setEnergyShield($property['values'][0][0]);
+                //         }
+                //         if ($property['name'] === 'Attacks per Second') {
+                //             $item->setAttacksPerSecond($property['values'][0][0]);
+                //         }
+                //         if ($property['name'] === 'Critical Strike Chance') {
+                //             $item->setCriticalStrikeChance($property['values'][0][0]);
+                //         }
+                //         if ($property['name'] === 'Map Level') {
+                //             $item->setMapLvl($property['values'][0][0]);
+                //         }
+                //     }
+                // }
 
                 $item->setType($type);
 
                 $item->setName($row['name'] ?: $type->getName());
 
-                if ($dps = $item->calcDps()) {
-                    $item->setDps($dps);
-                }
+                // if ($dps = $item->calcDps()) {
+                //     $item->setDps($dps);
+                // }
 
-                if ($value = $item->calcAveragePhysicalDamage()) {
-                    $item->setAveragePhysicalDamage($value);
-                }
+                // if ($value = $item->calcAveragePhysicalDamage()) {
+                //     $item->setAveragePhysicalDamage($value);
+                // }
 
-                if ($value = $item->calcAverageFireDamage()) {
-                    $item->setAverageFireDamage($value);
-                }
+                // if ($value = $item->calcAverageFireDamage()) {
+                //     $item->setAverageFireDamage($value);
+                // }
 
-                if ($value = $item->calcAverageColdDamage()) {
-                    $item->setAverageColdDamage($value);
-                }
+                // if ($value = $item->calcAverageColdDamage()) {
+                //     $item->setAverageColdDamage($value);
+                // }
 
-                if ($value = $item->calcAverageLightningDamage()) {
-                    $item->setAverageLightningDamage($value);
-                }
+                // if ($value = $item->calcAverageLightningDamage()) {
+                //     $item->setAverageLightningDamage($value);
+                // }
 
-                if ($value = $item->calcAverageElementalDamage()) {
-                    $item->setAverageElementalDamage($value);
-                }
+                // if ($value = $item->calcAverageElementalDamage()) {
+                //     $item->setAverageElementalDamage($value);
+                // }
 
                 $this->itemManager->updateBatch($item, $i);
 
                 $label = $row['name'] ?: $row['typeLine'];
                 $this->output->writeln("<info>ADD</info> ".$label);
                 $i++;
+                $this->output->writeln('<error>'.(memory_get_usage(true)/1024/1024).'</error>');
             }
             $this->itemManager->getEntityManager()->flush();
+            $this->itemManager->getEntityManager()->clear();
         }
+    }
+
+    private function createImplicitMod($name, $item, $value)
+    {
+        $mod = $this->getContainer()->get('poe_core.implicit_mod_manager')->getOneBy(['a.name' => $name], [], false);
+        if (!$mod) {
+            $mod = $this->getContainer()->get('poe_core.implicit_mod_manager')->create();
+            $mod->setName($name);
+            $this->getContainer()->get('poe_core.implicit_mod_manager')->update($mod);
+        }
+
+        $itemMod = $this->getContainer()->get('poe_core.item_implicit_mod_manager')->create();
+        $itemMod->setItem($item);
+        $itemMod->setImplicitMod($mod);
+        $itemMod->setValue($value);
+
+        $item->getImplicitMods()->add($itemMod);
+    }
+
+    private function createExplicitMod($name, $item, $value)
+    {
+        $mod = $this->getContainer()->get('poe_core.explicit_mod_manager')->getOneBy(['a.name' => $name], [], false);
+        if (!$mod) {
+            $mod = $this->getContainer()->get('poe_core.explicit_mod_manager')->create();
+            $mod->setName($name);
+            $this->getContainer()->get('poe_core.explicit_mod_manager')->update($mod);
+        }
+
+        $itemMod = $this->getContainer()->get('poe_core.item_explicit_mod_manager')->create();
+        $itemMod->setItem($item);
+        $itemMod->setExplicitMod($mod);
+        $itemMod->setValue($value);
+
+        $item->getExplicitMods()->add($itemMod);
     }
 
     private function findType($row)

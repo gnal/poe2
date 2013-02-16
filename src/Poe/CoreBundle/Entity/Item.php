@@ -41,125 +41,85 @@ class Item
      */
     protected $type;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $quality;
+    // *
+    //  * @ORM\Column(type="integer", nullable=true)
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $dps;
+    // protected $quality;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minPhysicalDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $dps;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxPhysicalDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averagePhysicalDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minFireDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageFireDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxFireDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageColdDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minColdDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageLightningDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxColdDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=1, nullable=true)
+    //  */
+    // protected $averageElementalDamage;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $minLightningDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=2, nullable=true)
+    //  */
+    // protected $criticalStrikeChance;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxLightningDamage;
+    // /**
+    //  * @ORM\Column(type="decimal", scale=2, nullable=true)
+    //  */
+    // protected $attacksPerSecond;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averagePhysicalDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $armour;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageFireDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $evasionRating;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageColdDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $energyShield;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageLightningDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $intReq;
 
-    /**
-     * @ORM\Column(type="decimal", scale=1, nullable=true)
-     */
-    protected $averageElementalDamage;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $dexReq;
 
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    protected $criticalStrikeChance;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $strReq;
 
-    /**
-     * @ORM\Column(type="decimal", scale=2, nullable=true)
-     */
-    protected $attacksPerSecond;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $armour;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $evasionRating;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $energyShield;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $intReq;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $dexReq;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $strReq;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $lvlReq;
+    // /**
+    //  * @ORM\Column(type="integer", nullable=true)
+    //  */
+    // protected $lvlReq;
 
     /**
      * @ORM\Column(type="boolean")
@@ -207,115 +167,25 @@ class Item
     protected $threadId;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $mapLvl;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $increasedPhysicalDamage;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $increasedStunDuration;
-
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $intelligence;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $dexterity;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $strength;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $increasedAttackSpeed;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $increasedCastSpeed;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $manaOnKill;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $lifeOnKill;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $increasedElementalDamageWeapons;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $accuracyRating;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $lifeLeech;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $manaLeech;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $chaosResist;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $coldResist;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $lightningResist;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $fireResist;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $reducedStunThreshold;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $lifeOnHit;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $maxEnergyShield;
-
-    /**
      * @ORM\Column(type="text")
      */
     protected $json;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ItemImplicitMod", mappedBy="item", cascade={"all"})
+     */
+    protected $implicitMods;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ItemExplicitMod", mappedBy="item", cascade={"all"})
+     */
+    protected $explicitMods;
+
+    public function __construct()
+    {
+        $this->implicitMods = new ArrayCollection();
+        $this->explicitMods = new ArrayCollection();
+    }
 
     public function getJson()
     {
@@ -383,6 +253,30 @@ class Item
     }
 
     // getset
+
+    public function getImplicitMods()
+    {
+        return $this->implicitMods;
+    }
+
+    public function setImplicitMods($implicitMods)
+    {
+        $this->implicitMods = $implicitMods;
+
+        return $this;
+    }
+
+    public function getExplicitMods()
+    {
+        return $this->explicitMods;
+    }
+
+    public function setExplicitMods($explicitMods)
+    {
+        $this->explicitMods = $explicitMods;
+
+        return $this;
+    }
 
     public function getNumLinkedSockets()
     {
@@ -720,78 +614,6 @@ class Item
         return $this;
     }
 
-    public function getMinFireDamage()
-    {
-        return $this->minFireDamage;
-    }
-
-    public function setMinFireDamage($minFireDamage)
-    {
-        $this->minFireDamage = $minFireDamage;
-
-        return $this;
-    }
-
-    public function getMaxFireDamage()
-    {
-        return $this->maxFireDamage;
-    }
-
-    public function setMaxFireDamage($maxFireDamage)
-    {
-        $this->maxFireDamage = $maxFireDamage;
-
-        return $this;
-    }
-
-    public function getMinColdDamage()
-    {
-        return $this->minColdDamage;
-    }
-
-    public function setMinColdDamage($minColdDamage)
-    {
-        $this->minColdDamage = $minColdDamage;
-
-        return $this;
-    }
-
-    public function getMaxColdDamage()
-    {
-        return $this->maxColdDamage;
-    }
-
-    public function setMaxColdDamage($maxColdDamage)
-    {
-        $this->maxColdDamage = $maxColdDamage;
-
-        return $this;
-    }
-
-    public function getMinLightningDamage()
-    {
-        return $this->minLightningDamage;
-    }
-
-    public function setMinLightningDamage($minLightningDamage)
-    {
-        $this->minLightningDamage = $minLightningDamage;
-
-        return $this;
-    }
-
-    public function getMaxLightningDamage()
-    {
-        return $this->maxLightningDamage;
-    }
-
-    public function setMaxLightningDamage($maxLightningDamage)
-    {
-        $this->maxLightningDamage = $maxLightningDamage;
-
-        return $this;
-    }
-
     public function getAttacksPerSecond()
     {
         return $this->attacksPerSecond;
@@ -884,30 +706,6 @@ class Item
     public function setAccountName($accountName)
     {
         $this->accountName = $accountName;
-
-        return $this;
-    }
-
-    public function getMinPhysicalDamage()
-    {
-        return $this->minPhysicalDamage;
-    }
-
-    public function setMinPhysicalDamage($minPhysicalDamage)
-    {
-        $this->minPhysicalDamage = $minPhysicalDamage;
-
-        return $this;
-    }
-
-    public function getMaxPhysicalDamage()
-    {
-        return $this->maxPhysicalDamage;
-    }
-
-    public function setMaxPhysicalDamage($maxPhysicalDamage)
-    {
-        $this->maxPhysicalDamage = $maxPhysicalDamage;
 
         return $this;
     }
