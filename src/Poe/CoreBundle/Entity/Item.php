@@ -181,10 +181,16 @@ class Item
      */
     protected $explicitMods;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ItemProperty", mappedBy="item", cascade={"all"})
+     */
+    protected $properties;
+
     public function __construct()
     {
         $this->implicitMods = new ArrayCollection();
         $this->explicitMods = new ArrayCollection();
+        $this->properties = new ArrayCollection();
     }
 
     public function getJson()
@@ -253,6 +259,18 @@ class Item
     }
 
     // getset
+
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
+
+        return $this;
+    }
 
     public function getImplicitMods()
     {

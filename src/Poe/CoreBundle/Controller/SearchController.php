@@ -26,13 +26,13 @@ class SearchController extends Controller
     ];
 
     protected $armorTypes = [
-        'Ring',
-        'Amulet',
+        // 'Ring',
+        // 'Amulet',
         'Boots',
         'Helmet',
         'Glove',
         'Belt',
-        'Quiver',
+        // 'Quiver',
         'Chest Armor',
     ];
 
@@ -60,9 +60,9 @@ class SearchController extends Controller
             [
                 'a.type' => 't',
                 't.parent' => 'tp',
-            ],
+            ]
             // ['tp.name' => 'ASC', 'a.lvlReq' => 'ASC']
-            ['a.dps' => 'DESC']
+            // ['a.dps' => 'DESC']
         );
 
         for ($i=1; $i < 4; $i++) {
@@ -130,33 +130,23 @@ class SearchController extends Controller
         }
 
         $qb->setMaxResults(150);
-        // $qb->select(
-        //     'a.frameType',
-        //     'a.name',
-        //     'a.threadId',
-        //     'a.dps',
-        //     'a.averagePhysicalDamage',
-        //     'a.averageFireDamage',
-        //     'a.averageColdDamage',
-        //     'a.averageLightningDamage',
-        //     'a.armour',
-        //     'a.evasionRating',
-        //     'a.energyShield',
-        //     'a.attacksPerSecond',
-        //     'a.criticalStrikeChance',
-        //     'a.averageElementalDamage'
-        // );
+        $qb->select(
+            'a.frameType',
+            'a.name',
+            'a.threadId',
+            'a.sockets'
+        );
         $items = $qb->getQuery()->execute();
 
         $masterType = '';
 
-        if (isset($items[0]) && in_array($items[0]->getType()->getParent()->getName(), $this->weaponTypes)) {
-            $masterType = 'weapon';
-        }
+        // if (isset($items[0]) && in_array($items[0]->getType()->getParent()->getName(), $this->weaponTypes)) {
+        //     $masterType = 'weapon';
+        // }
 
-        if (isset($items[0]) && in_array($items[0]->getType()->getParent()->getName(), $this->armorTypes)) {
-            $masterType = 'armor';
-        }
+        // if (isset($items[0]) && in_array($items[0]->getType()->getParent()->getName(), $this->armorTypes)) {
+        //     $masterType = 'armor';
+        // }
 
         if ($this->getRequest()->isXmlHttpRequest()) {
             return $this->render('PoeCoreBundle:Item:search_content.html.twig', [

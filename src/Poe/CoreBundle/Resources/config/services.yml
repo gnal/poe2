@@ -53,3 +53,55 @@ services:
         class: %msi_cmf.manager.class%
         arguments: [ Poe\CoreBundle\Entity\ItemExplicitMod ]
         parent: msi_cmf.manager
+
+    # ImplicitMod
+    poe_core_implicit_mod_admin:
+        class: Poe\CoreBundle\Admin\ImplicitModAdmin
+        arguments: [ @poe_core.implicit_mod_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.implicit_mod_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\ImplicitMod ]
+        parent: msi_cmf.manager
+
+    # ItemImplicitMod
+    poe_core_item_implicit_mod_admin:
+        class: Poe\CoreBundle\Admin\ItemImplicitModAdmin
+        arguments: [ @poe_core.item_implicit_mod_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.item_implicit_mod_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\ItemImplicitMod ]
+        parent: msi_cmf.manager
+
+    # Property
+    poe_core_property_admin:
+        class: Poe\CoreBundle\Admin\PropertyAdmin
+        arguments: [ @poe_core.property_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.property_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\Property ]
+        parent: msi_cmf.manager
+
+    # ItemProperty
+    poe_core_item_property_admin:
+        class: Poe\CoreBundle\Admin\ItemPropertyAdmin
+        arguments: [ @poe_core.item_property_manager ]
+        parent: msi_cmf.admin
+        tags:
+            - { name: msi.admin }
+
+    poe_core.item_property_manager:
+        class: %msi_cmf.manager.class%
+        arguments: [ Poe\CoreBundle\Entity\ItemProperty ]
+        parent: msi_cmf.manager

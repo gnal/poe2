@@ -225,6 +225,91 @@ class CrawlCommand extends ContainerAwareCommand
                     }
                 }
 
+                // mods
+                if (isset($row['properties'])) {
+                    foreach ($row['properties'] as $property) {
+                        // $name = preg_replace('@[0-9]+\.?[0-9]*-[0-9]+\.?[0-9]*@', 'x', $mod);
+                        // preg_match('@([0-9]+\.?[0-9]*)-([0-9]+\.?[0-9]*)@', $mod, $matches);
+                        // $value = isset($matches[2]) ? ($matches[1] + $matches[2]) / 2 : null;
+
+                        // if (!isset($matches[2])) {
+                        //     $pattern = '[0-9]+\.?[0-9]*';
+                        //     $name = preg_replace('@'.$pattern.'@', 'x', $mod);
+                        //     preg_match('@('.$pattern.')@', $mod, $matches);
+                        //     $value = isset($matches[1]) ? $matches[1] : null;
+                        // }
+
+                        if (!empty($property['values'])) {
+                            if ($property['name'] === 'Physical Damage') {
+                                $pieces = explode('-', $property['values'][0][0]);
+                                $min = $pieces[0];
+                                $max = $pieces[1];
+                                $value = ($min + $max) / 2;
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Elemental Damage') {
+                                $total = 0;
+                                foreach ($property['values'] as $value) {
+                                    if ($value[1] == 4) {
+                                        $pieces = explode('-', $value[0]);
+                                        $min = $pieces[0];
+                                        $max = $pieces[1];
+                                        $value = ($min + $max) / 2;
+                                        $this->createProperty('Fire Damage', $item, $value);
+                                        $total += $value;
+                                    }
+                                    if ($value[1] == 5) {
+                                        $pieces = explode('-', $value[0]);
+                                        $min = $pieces[0];
+                                        $max = $pieces[1];
+                                        $value = ($min + $max) / 2;
+                                        $this->createProperty('Cold Damage', $item, $value);
+                                        $total += $value;
+                                    }
+                                    if ($value[1] == 6) {
+                                        $pieces = explode('-', $value[0]);
+                                        $min = $pieces[0];
+                                        $max = $pieces[1];
+                                        $value = ($min + $max) / 2;
+                                        $this->createProperty('Lightning Damage', $item, $value);
+                                        $total += $value;
+                                    }
+                                }
+                                $value = $total;
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Quality') {
+                                $value = str_replace('%', '', $property['values'][0][0]);
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Armour') {
+                                $value = $property['values'][0][0];
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Evasion Rating') {
+                                $value = $property['values'][0][0];
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Energy Shield') {
+                                $value = $property['values'][0][0];
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Attacks per Second') {
+                                $value = $property['values'][0][0];
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Critical Strike Chance') {
+                                $value = $property['values'][0][0];
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                            if ($property['name'] === 'Map Level') {
+                                $value = $property['values'][0][0];
+                                $this->createProperty($property['name'], $item, $value);
+                            }
+                        }
+                    }
+                }
+
 
                 // properties
                 // if (isset($row['properties'])) {
@@ -387,6 +472,23 @@ class CrawlCommand extends ContainerAwareCommand
         $itemMod->setValue($value);
 
         $item->getExplicitMods()->add($itemMod);
+    }
+
+    private function createProperty($name, $item, $value)
+    {
+        $mod = $this->getContainer()->get('poe_core.property_manager')->getOneBy(['a.name' => $name], [], false);
+        if (!$mod) {
+            $mod = $this->getContainer()->get('poe_core.property_manager')->create();
+            $mod->setName($name);
+            $this->getContainer()->get('poe_core.property_manager')->update($mod);
+        }
+
+        $itemMod = $this->getContainer()->get('poe_core.item_property_manager')->create();
+        $itemMod->setItem($item);
+        $itemMod->setProperty($mod);
+        $itemMod->setValue($value);
+
+        $item->getProperties()->add($itemMod);
     }
 
     private function findType($row)

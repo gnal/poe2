@@ -22,7 +22,8 @@
     {% for item in items %}
         <tr>
             <td>
-                <a data-content="{% include 'PoeCoreBundle:Item:_popover.html.twig' with {'item': item, 'masterType': masterType} %}" class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
+                {#data-content="{% include 'PoeCoreBundle:Item:_popover.html.twig' with {'item': item, 'masterType': masterType} %}"#}
+                <a class="item text-frame-type-{{ item.frameType }}" target="_blank" href="http://www.pathofexile.com/forum/view-thread/{{ item.threadId }}">
                     {{ item.name }}
                 </a>
                 {#<span>{{ item.name ? item.type : item.type.parent }}</span>#}
@@ -40,7 +41,7 @@
                     {% if item.lvlReq %}<span class="muted">Lvl: {{ item.lvlReq }}</span>{% endif %}
                     {% if item.strReq %}<span class="text-error">Str: {{ item.strReq }}</span>{% endif %}
                     {% if item.dexReq %}<span class="text-success">Dex: {{ item.dexReq }}</span>{% endif %}
-                    {% if item.intReq %}<span class="text-info">Int: {{ item.intReq }}</span>{% endif %}
+                    {% if item.intReq %}<span class="text-info">Int: {{ <item class="intReq"></item> }}</span>{% endif %}
                 </span>
             </td>#}
             <td>

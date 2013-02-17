@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  */
-class ItemImplicitMod
+class ItemProperty
 {
     /**
      * @ORM\Column(type="integer")
@@ -23,15 +23,15 @@ class ItemImplicitMod
     protected $value;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Item", inversedBy="implicitMods")
+     * @ORM\ManyToOne(targetEntity="Item", inversedBy="properties")
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $item;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ImplicitMod")
+     * @ORM\ManyToOne(targetEntity="Property")
      */
-    protected $implicitMod;
+    protected $property;
 
     public function getValue()
     {
@@ -57,14 +57,14 @@ class ItemImplicitMod
         return $this;
     }
 
-    public function getImplicitMod()
+    public function getProperty()
     {
-        return $this->implicitMod;
+        return $this->property;
     }
 
-    public function setImplicitMod($implicitMod)
+    public function setProperty($property)
     {
-        $this->implicitMod = $implicitMod;
+        $this->property = $property;
 
         return $this;
     }
